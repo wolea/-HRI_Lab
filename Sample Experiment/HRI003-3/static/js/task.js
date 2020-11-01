@@ -22,6 +22,8 @@ var pages = [
     "instruct-1.html",        // instructions
     "demographics.html",      // demographic information
     "check_video.html",       // checks the users audio and video
+    "video-A.html",		// story-telling robot video
+    "video-B.html",		// joke-telling robot video
     //"intro_video.html",       // first of our videos
     //"pretest.html",           // asking questions
     //"command_video.html",     // more videos
