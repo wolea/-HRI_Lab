@@ -22,13 +22,13 @@ var pages = [
     "instruct-1.html",        // instructions
     "demographics.html",      // demographic information
     "check_video.html",       // checks the users audio and video
-    "intro_video.html",       // first of our videos
-    "pretest.html",           // asking questions
-    "command_video.html",     // more videos
-    "response_video.html",    //
-    "questions.html",         // more questions
-    "final_question.html",    //
-    "check_question.html"     // attention check question
+    //"intro_video.html",       // first of our videos
+    //"pretest.html",           // asking questions
+    //"command_video.html",     // more videos
+    //"response_video.html",    //
+    //"questions.html",         // more questions
+    //"final_question.html",    //
+    //"check_question.html"     // attention check question
 ];
 
 psiTurk.preloadPages(pages);
