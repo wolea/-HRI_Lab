@@ -1,7 +1,7 @@
 [HIT Configuration]
-title = Robot Clarification # Your title here.
-description = Answer questions about an interaction with a robot. # Give a description!
-amt_keywords = Psychology, Philosophy, Trust, Robot, Robots, Ethics, Language, Interaction
+title = Likability of Joke-Telling Robot vs Story-Telling Robot # Robot Clarification # Your title here.
+description = Answer questions about two interactions with a robot. # Give a description!
+amt_keywords = Psychology, Philosophy, Trust, Robot, Robots, Ethics, Language, Interaction, Joke, Story, Likeability
 lifetime = 24
 us_only = true
 approve_requirement = 80
