@@ -22,10 +22,10 @@ var pages = [
     "instruct-1.html",        // instructions
     "demographics.html",      // demographic information
     "check_video.html",       // checks the users audio and video
-    "video-A.html",		// story-telling robot video
-    "video-B.html",		// joke-telling robot video
-    "video-A-questions.html",	// video A survey
-    "video-B-questions.html"	// video B survey
+    "Video-A.html",		// story-telling robot video
+    "Video-B.html",		// joke-telling robot video
+    "Video-A-questions.html",	// video A survey
+    "Video-B-questions.html"	// video B survey
     //"intro_video.html",       // first of our videos
     //"pretest.html",           // asking questions
     //"command_video.html",     // more videos
@@ -130,7 +130,7 @@ var VideoA = function() {
     var rscounter = 0;
 
     record_responses = function() {
-        psiTurk.recordTrialData({'phase':'video-A', 'status':'submit'});
+        psiTurk.recordTrialData({'phase':'Video-A', 'status':'submit'});
     };
 
     prompt_resubmit = function() {
@@ -150,29 +150,95 @@ var VideoA = function() {
     };
 
     // Load the questionnaire snippet
-    psiTurk.showPage('video-A.html');
+    psiTurk.showPage('Video-A.html');
     window.scrollTo(0, 0);
-    psiTurk.recordTrialData({'phase':'video-A', 'status':'begin'});
+    psiTurk.recordTrialData({'phase':'Video-A', 'status':'begin'});
 
 
-    $("#mp4src").attr("src", "/static/videos/Video A.mp4")
-    $("#oggsrc").attr("src", "/static/videos/introduction.ogg")
+    $("#mp4src").attr("src", "/static/videos/Video-A.mp4")
+    $("#oggsrc").attr("src", "/static/videos/Video-A.ogg")
 
     $("#video1").load();
 
 
     $("#video1").on('ended', function() {
-        psiTurk.recordTrialData({'phase':'intro_video', 'status':'video ended'});
+        psiTurk.recordTrialData({'phase':'Video-A', 'status':'video ended'});
         $('#next').removeAttr('disabled');
     });
 
     $("#ppbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'intro_video', 'status':'play/pause clicked: '+ppcounter});
+        psiTurk.recordTrialData({'phase':'Video-A', 'status':'play/pause clicked: '+ppcounter});
         ppcounter += 1;
     });
 
     $("#rsbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'intro_video', 'status':'restart clicked: '+rscounter});
+        psiTurk.recordTrialData({'phase':'Video-A', 'status':'restart clicked: '+rscounter});
+        rscounter += 1;
+    });
+
+    $("#next").click(function () {
+        record_responses();
+        currentview = new Pretest();
+    });
+};
+
+/***************
+ * Video B *
+ ***************/
+// You will likely leave this unchanged.
+var VideoB = function() {
+
+    psiTurk.finishInstructions();
+
+    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+    var ppcounter = 0;
+    var rscounter = 0;
+
+    record_responses = function() {
+        psiTurk.recordTrialData({'phase':'Video-B', 'status':'submit'});
+    };
+
+    prompt_resubmit = function() {
+        replaceBody(error_message);
+        $("#resubmit").click(resubmit);
+    };
+
+    resubmit = function() {
+        replaceBody("<h1>Trying to resubmit...</h1>");
+        reprompt = setTimeout(prompt_resubmit, 10000);
+        psiTurk.saveData({
+            success: function() {
+                clearInterval(reprompt);
+            },
+            error: prompt_resubmit
+        });
+    };
+
+    // Load the questionnaire snippet
+    psiTurk.showPage('Video-B.html');
+    window.scrollTo(0, 0);
+    psiTurk.recordTrialData({'phase':'Video-B', 'status':'begin'});
+
+
+    $("#mp4src").attr("src", "/static/videos/Video-B.mp4")
+    $("#oggsrc").attr("src", "/static/videos/Video-B.ogg")
+
+    $("#video1").load();
+
+
+    $("#video1").on('ended', function() {
+        psiTurk.recordTrialData({'phase':'Video-B', 'status':'video ended'});
+        $('#next').removeAttr('disabled');
+    });
+
+    $("#ppbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'Video-B', 'status':'play/pause clicked: '+ppcounter});
+        ppcounter += 1;
+    });
+
+    $("#rsbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'Video-B', 'status':'restart clicked: '+rscounter});
         rscounter += 1;
     });
 
