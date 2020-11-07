@@ -23,7 +23,9 @@ var pages = [
     "demographics.html",      // demographic information
     "check_video.html",       // checks the users audio and video
     "video-A.html",		// story-telling robot video
-    "video-B.html"		// joke-telling robot video
+    "video-B.html",		// joke-telling robot video
+    "video-A-questions.html",	// video A survey
+    "video-B-questions.html"	// video B survey
     //"intro_video.html",       // first of our videos
     //"pretest.html",           // asking questions
     //"command_video.html",     // more videos
