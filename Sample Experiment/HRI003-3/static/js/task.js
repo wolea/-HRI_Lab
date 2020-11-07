@@ -451,7 +451,7 @@ var VidCheck = function() {
  * Intro Video *
  ***************/
 // You will likely leave this unchanged.
-var IntroVideo = function() {
+/*var IntroVideo = function() {
 
     psiTurk.finishInstructions();
 
@@ -511,7 +511,7 @@ var IntroVideo = function() {
         record_responses();
         currentview = new Pretest();
     });
-};
+};*/
 
 
 /************
@@ -523,7 +523,7 @@ The big takeaway here is that in every question asking page you will need to
 make sure the record_responses function is updated with the number of questions
 you have and with the name you want them to appear in the database as.
 */
-var Pretest = function() {
+/*var Pretest = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -587,7 +587,7 @@ var Pretest = function() {
         currentview = new CommandVideo();
     });
 
-};
+};*/
 
 
 /*****************
@@ -595,7 +595,7 @@ var Pretest = function() {
  ****************/
 // This is the video in which the human issues their command
 // No questions are asked, and no input is required from the user
-var CommandVideo = function() {
+/*var CommandVideo = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -652,7 +652,7 @@ var CommandVideo = function() {
         record_responses();
         currentview = new ResponseVideo();
     });
-};
+};*/
 
 
 /******************
@@ -660,7 +660,7 @@ var CommandVideo = function() {
  *****************/
  // This is the video in which the robot issues its response
  // No questions are asked, and no input is required from the user
-var ResponseVideo = function() {
+/*var ResponseVideo = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -718,7 +718,7 @@ var ResponseVideo = function() {
         record_responses();
         currentview = new Questions();
     });
-};
+};*/
 
 
 /**************
@@ -731,7 +731,7 @@ stop and call the Check Question function, however in a within-subjects
 experiment we want to repeat the Command, Response, and Question functions as
 many times as elements in the square_conditions variable.
 */
-var Questions = function() {
+/*var Questions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -788,7 +788,7 @@ var Questions = function() {
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        */
+        *//*
         iter += 1;
         if (iter >= 4){
           currentview = new CheckQuestion();
@@ -802,14 +802,14 @@ var Questions = function() {
         }
     });
 
-};
+};*/
 
 
 /********************
  * Final Questions   *
  ********************/
 // Some final post-experiment questions about the experiment as a whole.
-var FinalQuestions = function() {
+/*var FinalQuestions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -867,7 +867,7 @@ var FinalQuestions = function() {
         currentview = new CheckQuestion();
     });
 
-};
+};*/
 
 
 /******************
@@ -875,7 +875,7 @@ var FinalQuestions = function() {
  ******************/
 // This question ensures that people are paying attention and are not bots
 // Incorrect answers to this question mean we can disregard their submission
-var CheckQuestion = function() {
+/*var CheckQuestion = function() {
 
     psiTurk.finishInstructions();
 
@@ -934,7 +934,7 @@ var CheckQuestion = function() {
             },
             error: prompt_resubmit});
     });
-};
+};*/
 
 
 /*******************
