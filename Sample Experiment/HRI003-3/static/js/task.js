@@ -49,10 +49,12 @@ var command_vid = ""
 var prefix = "/static/videos"
 var cond = ""
 var video_conditions = [
-  "toward_shrug",
+  "Video-A",
+  "Video-B"
+  /*"toward_shrug",
   "toward_hips",
   "away_shrug",
-  "away_hips"
+  "away_hips"*/
 ];
 
 /*
