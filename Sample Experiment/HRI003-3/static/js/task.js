@@ -116,6 +116,71 @@ var question_label = video_conditions[square_conditions[iter]]; // This is just 
  *
  ********************/
 
+/***************
+ * Video A *
+ ***************/
+// You will likely leave this unchanged.
+var VideoA = function() {
+
+    psiTurk.finishInstructions();
+
+    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+    var ppcounter = 0;
+    var rscounter = 0;
+
+    record_responses = function() {
+        psiTurk.recordTrialData({'phase':'video-A', 'status':'submit'});
+    };
+
+    prompt_resubmit = function() {
+        replaceBody(error_message);
+        $("#resubmit").click(resubmit);
+    };
+
+    resubmit = function() {
+        replaceBody("<h1>Trying to resubmit...</h1>");
+        reprompt = setTimeout(prompt_resubmit, 10000);
+        psiTurk.saveData({
+            success: function() {
+                clearInterval(reprompt);
+            },
+            error: prompt_resubmit
+        });
+    };
+
+    // Load the questionnaire snippet
+    psiTurk.showPage('video-A.html');
+    window.scrollTo(0, 0);
+    psiTurk.recordTrialData({'phase':'video-A', 'status':'begin'});
+
+
+    $("#mp4src").attr("src", "/static/videos/Video A.mp4")
+    $("#oggsrc").attr("src", "/static/videos/introduction.ogg")
+
+    $("#video1").load();
+
+
+    $("#video1").on('ended', function() {
+        psiTurk.recordTrialData({'phase':'intro_video', 'status':'video ended'});
+        $('#next').removeAttr('disabled');
+    });
+
+    $("#ppbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'intro_video', 'status':'play/pause clicked: '+ppcounter});
+        ppcounter += 1;
+    });
+
+    $("#rsbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'intro_video', 'status':'restart clicked: '+rscounter});
+        rscounter += 1;
+    });
+
+    $("#next").click(function () {
+        record_responses();
+        currentview = new Pretest();
+    });
+};
 
 /*****************************
  * Demographic Questionnaire *
