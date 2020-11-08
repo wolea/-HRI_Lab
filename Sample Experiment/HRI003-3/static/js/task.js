@@ -32,7 +32,7 @@ var pages = [
     //"response_video.html",    //
     //"questions.html",         // more questions
     //"final_question.html",    //
-    //"check_question.html"     // attention check question
+    "check_question.html"     // attention check question
 ];
 
 psiTurk.preloadPages(pages);
@@ -160,10 +160,10 @@ var VideoA = function() {
     $("#mp4src").attr("src", "/static/videos/Video-A.mp4")
     $("#oggsrc").attr("src", "/static/videos/Video-A.ogg")
 
-    $("#video1").load();
+    $("#videoA").load();
 
 
-    $("#video1").on('ended', function() {
+    $("#videoA").on('ended', function() {
         psiTurk.recordTrialData({'phase':'Video-A', 'status':'video ended'});
         $('#next').removeAttr('disabled');
     });
@@ -226,10 +226,10 @@ var VideoB = function() {
     $("#mp4src").attr("src", "/static/videos/Video-B.mp4")
     $("#oggsrc").attr("src", "/static/videos/Video-B.ogg")
 
-    $("#video1").load();
+    $("#videoB").load();
 
 
-    $("#video1").on('ended', function() {
+    $("#videoB").on('ended', function() {
         psiTurk.recordTrialData({'phase':'Video-B', 'status':'video ended'});
         $('#next').removeAttr('disabled');
     });
@@ -444,7 +444,12 @@ var VidCheck = function() {
 
     $("#next").click(function () {
         record_responses();
-        currentview = new IntroVideo();
+	if(randomNumber == 1){
+		currentview = new VideoA();
+	}else{
+		currentview = new VideoB();
+	}
+        //currentview = new IntroVideo();
     });
 };
 
@@ -515,7 +520,7 @@ var VidAQuestions = function() {
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        */
+        *//*
         iter += 1;
         if (iter >= 4){
           currentview = new CheckQuestion();
@@ -526,7 +531,12 @@ var VidAQuestions = function() {
           response_vid = prefix + cond + video_conditions[square_conditions[iter]];
           question_label = video_conditions[square_conditions[iter]];
           currentview = new ResponseVideo();
-        }
+        }*/
+	if(randomNumber == 1){
+		currentview = new VideoB();
+	}else{
+		currentview = new CheckQuestion();
+	}
     });
 
 };
@@ -598,7 +608,7 @@ var VidBQuestions = function() {
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        */
+        *//*
         iter += 1;
         if (iter >= 4){
           currentview = new CheckQuestion();
@@ -609,7 +619,12 @@ var VidBQuestions = function() {
           response_vid = prefix + cond + video_conditions[square_conditions[iter]];
           question_label = video_conditions[square_conditions[iter]];
           currentview = new ResponseVideo();
-        }
+        }*/
+	if(randomNumber == 1){
+		currentview = new CheckQuestion();
+	}else{
+		currentview = new VideoA();
+	}    
     });
 
 };
@@ -1042,7 +1057,7 @@ many times as elements in the square_conditions variable.
  ******************/
 // This question ensures that people are paying attention and are not bots
 // Incorrect answers to this question mean we can disregard their submission
-/*var CheckQuestion = function() {
+var CheckQuestion = function() {
 
     psiTurk.finishInstructions();
 
@@ -1101,7 +1116,7 @@ many times as elements in the square_conditions variable.
             },
             error: prompt_resubmit});
     });
-};*/
+};
 
 
 /*******************
