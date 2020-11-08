@@ -180,7 +180,7 @@ var VideoA = function() {
 
     $("#next").click(function () {
         record_responses();
-        currentview = new Pretest();
+        currentview = new VidAQuestions();
     });
 };
 
@@ -246,7 +246,7 @@ var VideoB = function() {
 
     $("#next").click(function () {
         record_responses();
-        currentview = new Pretest();
+        currentview = new VidBQuestions();
     });
 };
 
