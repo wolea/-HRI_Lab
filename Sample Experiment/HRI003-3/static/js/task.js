@@ -68,7 +68,7 @@ Condition mod 4 will determine what latin square combination is displayed.
 
 // Below is the within-subjects portion of the experiment.
 // Each condition is shown four videos.
-var square_conditions=[];
+/* var square_conditions=[];
 switch(mycondition % 4){
   case 0:
     square_conditions = [0,1,2,3];
@@ -102,10 +102,22 @@ else { // Steal & Rebuke
     cond = "/response/rebuke/"
     command_vid = "/static/videos/command/steal"
 }
+*/
+var randomfloat = Math.random();
+var randomNumber;
 
-var iter = 0; // This keeps track of which video in square_conditions we are currently showing and is updated in the Questions function
-var response_vid = prefix + cond + video_conditions[square_conditions[iter]]; // This builds the path of the video we want to show currently
-var question_label = video_conditions[square_conditions[iter]]; // This is just the label of the video so the database is more readable
+
+if (randomfloat > 0.5){
+	randomNumber = 1;
+}else{
+	randomNumber = 0;
+}
+
+// randomNumber=1 will mean that Video B is shown first. 
+
+var iter = 0; // This keeps track of which video we are currently showing and is updated in the Questions function
+var response_vid = prefix + cond + video_conditions[randomNumber]; // This builds the path of the video we want to show currently
+var question_label = video_conditions[randomNumber]; // This is just the label of the video so the database is more readable
 
 
 /********************
@@ -189,7 +201,9 @@ var VideoA = function() {
  ***************/
 // You will likely leave this unchanged.
 var VideoB = function() {
-
+	
+    // not sure about this, we will see if this is necessary
+    
     psiTurk.finishInstructions();
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
@@ -445,9 +459,10 @@ var VidCheck = function() {
     $("#next").click(function () {
         record_responses();
 	if(randomNumber == 1){
-		currentview = new VideoA();
-	}else{
+		//changed the logic here
 		currentview = new VideoB();
+	}else{
+		currentview = new VideoA();
 	}
         //currentview = new IntroVideo();
     });
@@ -532,7 +547,9 @@ var VidAQuestions = function() {
           question_label = video_conditions[square_conditions[iter]];
           currentview = new ResponseVideo();
         }*/
-	if(randomNumber == 1){
+	    
+	    // changed logic here as well, since if randomNumber = 0 means start with Video-A condition
+	if(randomNumber == 0){
 		currentview = new VideoB();
 	}else{
 		currentview = new CheckQuestion();
@@ -620,7 +637,9 @@ var VidBQuestions = function() {
           question_label = video_conditions[square_conditions[iter]];
           currentview = new ResponseVideo();
         }*/
-	if(randomNumber == 1){
+	    
+	 // changed logic here as well
+	if(randomNumber == 0){
 		currentview = new CheckQuestion();
 	}else{
 		currentview = new VideoA();
