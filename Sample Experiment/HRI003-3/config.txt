@@ -13,13 +13,14 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-
-database_url = postgres://lxfftebsvdjsat:419a3d65094160159813ccc73605e08d6e01a233318e9758e59ec4a5b59d937c@ec2-3-95-87-221.compute-1.amazonaws.com:5432/de4h5jga4cr8c6
+database_url = sqlite:///participants.db
+#database_url = sqlite:///clarification.db
+#database_url = postgres://lxfftebsvdjsat:419a3d65094160159813ccc73605e08d6e01a233318e9758e59ec4a5b59d937c@ec2-3-95-87-221.compute-1.amazonaws.com:5432/de4h5jga4cr8c6
 #database_url = postgres://uvipxxpjjhbrdu:6837c98f00644d2933b5af79d8d54214e64af96054d902ec900ee20dba6199db@ec2-54-243-67-199.compute-1.amazonaws.com:5432/d2ktvi119cch6a # Example postgres database url
 
 [Server Parameters]
-host = 0.0.0.0 # Once you have heroku set up
-#host = localhost # If testing locally (before heroku deployment)
+host = localhost
+#host = 0.0.0.0 # Once you have heroku set up
 port = 22362
 cutoff_time = 60
 logfile = server.log
