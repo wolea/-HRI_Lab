@@ -1,7 +1,7 @@
 [HIT Configuration]
-title = Likability of Joke-Telling Robot vs Story-Telling Robot # Robot Clarification # Your title here.
+title = Joke telling vs story telling robot # Your title here.
 description = Answer questions about two interactions with a robot. # Give a description!
-amt_keywords = Psychology, Philosophy, Trust, Robot, Robots, Ethics, Language, Interaction, Joke, Story, Likeability
+amt_keywords = Psychology, Philosophy, Trust, Robot, Robots, Ethics, Language, Interaction
 lifetime = 24
 us_only = true
 approve_requirement = 80
@@ -13,14 +13,14 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///participants.db
-#database_url = sqlite:///clarification.db
-#database_url = postgres://lxfftebsvdjsat:419a3d65094160159813ccc73605e08d6e01a233318e9758e59ec4a5b59d937c@ec2-3-95-87-221.compute-1.amazonaws.com:5432/de4h5jga4cr8c6
+
+database_url = sqlite:///clarification.db
 #database_url = postgres://uvipxxpjjhbrdu:6837c98f00644d2933b5af79d8d54214e64af96054d902ec900ee20dba6199db@ec2-54-243-67-199.compute-1.amazonaws.com:5432/d2ktvi119cch6a # Example postgres database url
 
 [Server Parameters]
-host = localhost
 #host = 0.0.0.0 # Once you have heroku set up
+#host = 127.0.0.1
+host = localhost
 port = 22362
 cutoff_time = 60
 logfile = server.log
@@ -33,7 +33,7 @@ secret_key = 'change this'
 
 [Task Parameters]
 experiment_code_version = 1.0 # Update this every time you change your code! (Sometimes it breaks if you don't)
-num_conds = 16 # This experiment has 4 between-subjects, followed by 4 within-subjects (hence 16)
+num_conds = 16
 num_counters = 1
 
 [Shell Parameters]
@@ -44,5 +44,5 @@ launch_in_sandbox_mode = true
 #   https://<host>:<port>/ad
 
 use_psiturk_ad_server = false
-ad_location = https://salty-forest-80053.herokuapp.com/pub # Your heroku app url
+ad_location = https://<url> # Your heroku app url
 # ad_location = https://frozen-wave-83600.herokuapp.com/pub Example heroku app url
