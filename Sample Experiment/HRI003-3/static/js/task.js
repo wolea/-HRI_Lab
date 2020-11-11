@@ -22,17 +22,17 @@ var pages = [
     "instruct-1.html",        // instructions
     "demographics.html",      // demographic information
     "check_video.html",       // checks the users audio and video
+    "intro_video.html",       // first of our videos
+    "pretest.html",           // asking questions
+    "command_video.html",     // more videos
+    "response_video.html",    //
+    "questions.html",         // more questions
+    "final_question.html",    //
+    "check_question.html",     // attention check question
     "Video-A.html",		// story-telling robot video
     "Video-B.html",		// joke-telling robot video
     "Video-A-questions.html",	// video A survey
-    "Video-B-questions.html"	// video B survey
-    //"intro_video.html",       // first of our videos
-    //"pretest.html",           // asking questions
-    //"command_video.html",     // more videos
-    //"response_video.html",    //
-    //"questions.html",         // more questions
-    //"final_question.html",    //
-    "check_question.html"     // attention check question
+    "Video-B-questions.html"
 ];
 
 psiTurk.preloadPages(pages);
@@ -49,12 +49,12 @@ var command_vid = ""
 var prefix = "/static/videos"
 var cond = ""
 var video_conditions = [
-  "Video-A",
-  "Video-B"
-  /*"toward_shrug",
+  "toward_shrug",
   "toward_hips",
   "away_shrug",
-  "away_hips"*/
+  "away_hips",
+  "Video-A",
+  "Video-B"
 ];
 
 /*
@@ -68,7 +68,22 @@ Condition mod 4 will determine what latin square combination is displayed.
 
 // Below is the within-subjects portion of the experiment.
 // Each condition is shown four videos.
-/* var square_conditions=[];
+var square_conditions=[];
+switch(mycondition % 4){
+  case 0:
+    square_conditions = [4,5];
+    break;
+  case 1:
+    square_conditions = [5,4];
+    break;
+  case 2:
+    square_conditions = [4,5];
+    break;
+  case 3:
+    square_conditions = [5,4];
+    break;
+}
+/*
 switch(mycondition % 4){
   case 0:
     square_conditions = [0,1,2,3];
@@ -83,6 +98,7 @@ switch(mycondition % 4){
     square_conditions = [3,2,1,0];
     break;
 }
+*/
 
 // Below is the between-subjects portion of the experiment.
 // Each condition is assigned a (action,response) pair.
@@ -102,22 +118,11 @@ else { // Steal & Rebuke
     cond = "/response/rebuke/"
     command_vid = "/static/videos/command/steal"
 }
-*/
-var randomfloat = Math.random();
-var randomNumber;
 
-
-if (randomfloat > 0.5){
-	randomNumber = 1;
-}else{
-	randomNumber = 0;
-}
-
-// randomNumber=1 will mean that Video B is shown first. 
-
-var iter = 0; // This keeps track of which video we are currently showing and is updated in the Questions function
-var response_vid = prefix + cond + video_conditions[randomNumber]; // This builds the path of the video we want to show currently
-var question_label = video_conditions[randomNumber]; // This is just the label of the video so the database is more readable
+var iter = 0; // This keeps track of which video in square_conditions we are currently showing and is updated in the Questions function
+//var response_vid = prefix + cond + video_conditions[square_conditions[iter]]; // This builds the path of the video we want to show currently
+var response_vid = prefix + video_conditions[square_conditions[iter]]; // This builds the path of the video we want to show currently
+var question_label = video_conditions[square_conditions[iter]]; // This is just the label of the video so the database is more readable
 
 
 /********************
@@ -130,139 +135,6 @@ var question_label = video_conditions[randomNumber]; // This is just the label o
  *
  ********************/
 
-/***************
- * Video A *
- ***************/
-// You will likely leave this unchanged.
-var VideoA = function() {
-
-    psiTurk.finishInstructions();
-
-    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
-
-    var ppcounter = 0;
-    var rscounter = 0;
-
-    record_responses = function() {
-        psiTurk.recordTrialData({'phase':'Video-A', 'status':'submit'});
-    };
-
-    prompt_resubmit = function() {
-        replaceBody(error_message);
-        $("#resubmit").click(resubmit);
-    };
-
-    resubmit = function() {
-        replaceBody("<h1>Trying to resubmit...</h1>");
-        reprompt = setTimeout(prompt_resubmit, 10000);
-        psiTurk.saveData({
-            success: function() {
-                clearInterval(reprompt);
-            },
-            error: prompt_resubmit
-        });
-    };
-
-    // Load the questionnaire snippet
-    psiTurk.showPage('Video-A.html');
-    window.scrollTo(0, 0);
-    psiTurk.recordTrialData({'phase':'Video-A', 'status':'begin'});
-
-
-    $("#mp4src").attr("src", "/static/videos/Video-A.mp4")
-    $("#oggsrc").attr("src", "/static/videos/Video-A.ogg")
-
-    $("#videoA").load();
-
-
-    $("#videoA").on('ended', function() {
-        psiTurk.recordTrialData({'phase':'Video-A', 'status':'video ended'});
-        $('#next').removeAttr('disabled');
-    });
-
-    $("#ppbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'Video-A', 'status':'play/pause clicked: '+ppcounter});
-        ppcounter += 1;
-    });
-
-    $("#rsbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'Video-A', 'status':'restart clicked: '+rscounter});
-        rscounter += 1;
-    });
-
-    $("#next").click(function () {
-        record_responses();
-        currentview = new VidAQuestions();
-    });
-};
-
-/***************
- * Video B *
- ***************/
-// You will likely leave this unchanged.
-var VideoB = function() {
-	
-    // not sure about this, we will see if this is necessary
-    
-    psiTurk.finishInstructions();
-
-    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
-
-    var ppcounter = 0;
-    var rscounter = 0;
-
-    record_responses = function() {
-        psiTurk.recordTrialData({'phase':'Video-B', 'status':'submit'});
-    };
-
-    prompt_resubmit = function() {
-        replaceBody(error_message);
-        $("#resubmit").click(resubmit);
-    };
-
-    resubmit = function() {
-        replaceBody("<h1>Trying to resubmit...</h1>");
-        reprompt = setTimeout(prompt_resubmit, 10000);
-        psiTurk.saveData({
-            success: function() {
-                clearInterval(reprompt);
-            },
-            error: prompt_resubmit
-        });
-    };
-
-    // Load the questionnaire snippet
-    psiTurk.showPage('Video-B.html');
-    window.scrollTo(0, 0);
-    psiTurk.recordTrialData({'phase':'Video-B', 'status':'begin'});
-
-
-    $("#mp4src").attr("src", "/static/videos/Video-B.mp4")
-    $("#oggsrc").attr("src", "/static/videos/Video-B.ogg")
-
-    $("#videoB").load();
-
-
-    $("#videoB").on('ended', function() {
-        psiTurk.recordTrialData({'phase':'Video-B', 'status':'video ended'});
-        $('#next').removeAttr('disabled');
-    });
-
-    $("#ppbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'Video-B', 'status':'play/pause clicked: '+ppcounter});
-        ppcounter += 1;
-    });
-
-    $("#rsbutton").click(function () {
-        psiTurk.recordTrialData({'phase':'Video-B', 'status':'restart clicked: '+rscounter});
-        rscounter += 1;
-    });
-
-    $("#next").click(function () {
-        record_responses();
-        currentview = new VidBQuestions();
-    });
-};
 
 /*****************************
  * Demographic Questionnaire *
@@ -458,34 +330,99 @@ var VidCheck = function() {
 
     $("#next").click(function () {
         record_responses();
-	if(randomNumber == 1){
-		//changed the logic here
-		currentview = new VideoB();
-	}else{
-		currentview = new VideoA();
-	}
-        //currentview = new IntroVideo();
+        if (square_conditions[iter]==4) {
+            currentview = new VideoA();
+        }else {
+            currentview = new VideoB();
+        }
+    });
+};
+
+/***************
+ * Video A *
+ ***************/
+// You will likely leave this unchanged.
+var VideoA = function() {
+
+    psiTurk.finishInstructions();
+
+    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+    var ppcounter = 0;
+    var rscounter = 0;
+
+    record_responses = function() {
+        psiTurk.recordTrialData({'phase':'videoA', 'status':'submit'});
+    };
+
+    prompt_resubmit = function() {
+        replaceBody(error_message);
+        $("#resubmit").click(resubmit);
+    };
+
+    resubmit = function() {
+        replaceBody("<h1>Trying to resubmit...</h1>");
+        reprompt = setTimeout(prompt_resubmit, 10000);
+        psiTurk.saveData({
+            success: function() {
+                clearInterval(reprompt);
+            },
+            error: prompt_resubmit
+        });
+    };
+
+    // Load the questionnaire snippet
+    psiTurk.showPage('Video-A.html');
+    window.scrollTo(0, 0);
+    psiTurk.recordTrialData({'phase':'videoA', 'status':'begin'});
+
+
+    $("#mp4src").attr("src", "/static/videos/Video-A.mp4")
+    $("#oggsrc").attr("src", "/static/videos/Video-A.ogg")
+
+    $("#videoA").load();
+
+
+    $("#videoA").on('ended', function() {
+        psiTurk.recordTrialData({'phase':'videoA', 'status':'video ended'});
+        $('#next').removeAttr('disabled');
+    });
+
+    $("#ppbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'videoA', 'status':'play/pause clicked: '+ppcounter});
+        ppcounter += 1;
+    });
+
+    $("#rsbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'videoA', 'status':'restart clicked: '+rscounter});
+        rscounter += 1;
+    });
+
+    $("#next").click(function () {
+        record_responses();
+        currentview = new VideoAQuestions();
     });
 };
 
 /**************
- * Video A Questions  *
+ * VideoAQuestions  *
  **************/
-// This asks the user some questions about video A they just watched.
+// This asks the user some questions about videoA they just watched.
 /*
 Note: In a traditional between-subjects experiment this is where we would
 stop and call the Check Question function, however in a within-subjects
 experiment we want to repeat the Command, Response, and Question functions as
+
 many times as elements in the square_conditions variable.
 */
-var VidAQuestions = function() {
+var VideoAQuestions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
     // Nore that the phase is updated to reflect the new within-subjects assignment.
     record_responses = function() {
         psiTurk.recordTrialData({'phase':'questions_'+response_vid, 'status':'submit'});
-        for(i=1; i<=5; i++){
+        for(i=1; i<=15; i++){
             psiTurk.recordUnstructuredData(question_label +"_"+i,$("input[name='"+i+"']").val());
         }
     };
@@ -535,47 +472,107 @@ var VidAQuestions = function() {
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        *//*
+        */
         iter += 1;
-        if (iter >= 4){
+        if (iter >= 2){
           currentview = new CheckQuestion();
         }
         else {
           // Here we need to update the within-subjects variables before hopping
           // back in the experiment flow.
-          response_vid = prefix + cond + video_conditions[square_conditions[iter]];
+          response_vid = prefix + video_conditions[square_conditions[iter]];
+          //response_vid = prefix + cond + video_conditions[square_conditions[iter]];
           question_label = video_conditions[square_conditions[iter]];
-          currentview = new ResponseVideo();
-        }*/
-	    
-	    // changed logic here as well, since if randomNumber = 0 means start with Video-A condition
-	if(randomNumber == 0){
-		currentview = new VideoB();
-	}else{
-		currentview = new CheckQuestion();
-	}
+          currentview = new VideoB();
+        }
     });
 
 };
 
+/***************
+ * Video B *
+ ***************/
+// You will likely leave this unchanged.
+var VideoB = function() {
+
+    psiTurk.finishInstructions();
+
+    var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+    var ppcounter = 0;
+    var rscounter = 0;
+
+    record_responses = function() {
+        psiTurk.recordTrialData({'phase':'videoB', 'status':'submit'});
+    };
+
+    prompt_resubmit = function() {
+        replaceBody(error_message);
+        $("#resubmit").click(resubmit);
+    };
+
+    resubmit = function() {
+        replaceBody("<h1>Trying to resubmit...</h1>");
+        reprompt = setTimeout(prompt_resubmit, 10000);
+        psiTurk.saveData({
+            success: function() {
+                clearInterval(reprompt);
+            },
+            error: prompt_resubmit
+        });
+    };
+
+    // Load the questionnaire snippet
+    psiTurk.showPage('Video-B.html');
+    window.scrollTo(0, 0);
+    psiTurk.recordTrialData({'phase':'videoB', 'status':'begin'});
+
+
+    $("#mp4src").attr("src", "/static/videos/Video-B.mp4")
+    $("#oggsrc").attr("src", "/static/videos/Video-B.ogg")
+
+    $("#videoB").load();
+
+
+    $("#videoB").on('ended', function() {
+        psiTurk.recordTrialData({'phase':'videoB', 'status':'video ended'});
+        $('#next').removeAttr('disabled');
+    });
+
+    $("#ppbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'videoB', 'status':'play/pause clicked: '+ppcounter});
+        ppcounter += 1;
+    });
+
+    $("#rsbutton").click(function () {
+        psiTurk.recordTrialData({'phase':'videoB', 'status':'restart clicked: '+rscounter});
+        rscounter += 1;
+    });
+
+    $("#next").click(function () {
+        record_responses();
+        currentview = new VideoBQuestions();
+    });
+};
+
 /**************
- * Video B Questions  *
+ * VideoBQuestions  *
  **************/
-// This asks the user some questions about video A they just watched.
+// This asks the user some questions about videoA they just watched.
 /*
 Note: In a traditional between-subjects experiment this is where we would
 stop and call the Check Question function, however in a within-subjects
 experiment we want to repeat the Command, Response, and Question functions as
 many times as elements in the square_conditions variable.
 */
-var VidBQuestions = function() {
+var VideoBQuestions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
     // Nore that the phase is updated to reflect the new within-subjects assignment.
     record_responses = function() {
         psiTurk.recordTrialData({'phase':'questions_'+response_vid, 'status':'submit'});
-        for(i=1; i<=5; i++){
+        for(i=1; i<=15; i++){
             psiTurk.recordUnstructuredData(question_label +"_"+i,$("input[name='"+i+"']").val());
         }
     };
@@ -625,25 +622,19 @@ var VidBQuestions = function() {
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        *//*
+        */
         iter += 1;
-        if (iter >= 4){
+        if (iter >= 2){
           currentview = new CheckQuestion();
         }
         else {
           // Here we need to update the within-subjects variables before hopping
           // back in the experiment flow.
-          response_vid = prefix + cond + video_conditions[square_conditions[iter]];
+          response_vid = prefix + video_conditions[square_conditions[iter]];
+          //response_vid = prefix + cond + video_conditions[square_conditions[iter]];
           question_label = video_conditions[square_conditions[iter]];
-          currentview = new ResponseVideo();
-        }*/
-	    
-	 // changed logic here as well
-	if(randomNumber == 0){
-		currentview = new CheckQuestion();
-	}else{
-		currentview = new VideoA();
-	}    
+          currentview = new VideoA();
+        }
     });
 
 };
@@ -652,7 +643,7 @@ var VidBQuestions = function() {
  * Intro Video *
  ***************/
 // You will likely leave this unchanged.
-/*var IntroVideo = function() {
+var IntroVideo = function() {
 
     psiTurk.finishInstructions();
 
@@ -712,7 +703,7 @@ var VidBQuestions = function() {
         record_responses();
         currentview = new Pretest();
     });
-};*/
+};
 
 
 /************
@@ -724,7 +715,7 @@ The big takeaway here is that in every question asking page you will need to
 make sure the record_responses function is updated with the number of questions
 you have and with the name you want them to appear in the database as.
 */
-/*var Pretest = function() {
+var Pretest = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -788,7 +779,7 @@ you have and with the name you want them to appear in the database as.
         currentview = new CommandVideo();
     });
 
-};*/
+};
 
 
 /*****************
@@ -796,7 +787,7 @@ you have and with the name you want them to appear in the database as.
  ****************/
 // This is the video in which the human issues their command
 // No questions are asked, and no input is required from the user
-/*var CommandVideo = function() {
+var CommandVideo = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -853,7 +844,7 @@ you have and with the name you want them to appear in the database as.
         record_responses();
         currentview = new ResponseVideo();
     });
-};*/
+};
 
 
 /******************
@@ -861,7 +852,7 @@ you have and with the name you want them to appear in the database as.
  *****************/
  // This is the video in which the robot issues its response
  // No questions are asked, and no input is required from the user
-/*var ResponseVideo = function() {
+var ResponseVideo = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -919,7 +910,7 @@ you have and with the name you want them to appear in the database as.
         record_responses();
         currentview = new Questions();
     });
-};*/
+};
 
 
 /**************
@@ -932,7 +923,7 @@ stop and call the Check Question function, however in a within-subjects
 experiment we want to repeat the Command, Response, and Question functions as
 many times as elements in the square_conditions variable.
 */
-/*var Questions = function() {
+var Questions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your information. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -989,7 +980,7 @@ many times as elements in the square_conditions variable.
         /*
         This reflects a within-subjets approach. In a between subjects approach
         we would just move to a new CheckQuestion
-        *//*
+        */
         iter += 1;
         if (iter >= 4){
           currentview = new CheckQuestion();
@@ -1003,14 +994,14 @@ many times as elements in the square_conditions variable.
         }
     });
 
-};*/
+};
 
 
 /********************
  * Final Questions   *
  ********************/
 // Some final post-experiment questions about the experiment as a whole.
-/*var FinalQuestions = function() {
+var FinalQuestions = function() {
 
     var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
@@ -1068,7 +1059,7 @@ many times as elements in the square_conditions variable.
         currentview = new CheckQuestion();
     });
 
-};*/
+};
 
 
 /******************
